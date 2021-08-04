@@ -1,3 +1,8 @@
-FROM alpine:3
+FROM caddy:2-builder-alpine AS builder
 
-CMD echo "elo"
+RUN xcaddy build \
+    --with github.com/mholt/caddy-ratelimit
+
+FROM caddy:2-alpine
+
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
